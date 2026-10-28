@@ -172,6 +172,9 @@ func buildView(snap *ncsoft.Snapshot, class *gamedata.Class, sheet *stats.Sheet,
 					label := node.Label
 					if node.Type == "Stat" && len(node.Stats) == 1 {
 						label = stats.Label(stats.Key(node.Stats[0].Stat))
+						if l, ok := class.Boards.StatLabels[node.Stats[0].Stat]; ok && label == node.Stats[0].Stat {
+							label = l
+						}
 						if _, ok := totals[label]; !ok {
 							order = append(order, label)
 						}
