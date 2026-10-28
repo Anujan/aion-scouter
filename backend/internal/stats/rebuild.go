@@ -32,7 +32,7 @@ func Rebuild(snap *ncsoft.Snapshot, class *gamedata.Class) (*Sheet, Report) {
 	var rep Report
 
 	for k, v := range class.Model.Base {
-		s.Add(Key(k), v, "Class base", "estimated class baseline")
+		s.Add(Key(k), v, "Base", "level 45 base (calibrated)")
 	}
 
 	// Primary and god stats: the API gives their derived effects as text lines.

@@ -66,7 +66,38 @@ type Entry struct {
 	Sources []Contribution `json:"sources"`
 }
 
-// Entries lists every non-zero stat, offense first.
+// ratios maps rating stats to the "X increase %" stat that multiplies them.
+// The in-game stat window shows the multiplied value.
+var ratios = map[Key]Key{
+	Critical:         CriticalRatio,
+	Accuracy:         AccuracyRatio,
+	"CriticalResist": "CriticalResistRatio",
+	"Evasion":        "EvasionRatio",
+	"Block":          "BlockRatio",
+	HPMax:            "HPRatio",
+	MPMax:            "MPRatio",
+	Defense:          "DefenseRatio",
+}
+
+// Final is a stat as the in-game stat window shows it: flat total times its
+// "increase %" stat, if it has one.
+func (s *Sheet) Final(k Key) float64 {
+	if r, ok := ratios[k]; ok {
+		return s.values[k] * (1 + s.Pct(r))
+	}
+	return s.values[k]
+}
+
+// SetFinal overrides a stat with a value read from the in-game stat window,
+// backing out its "increase %" so Final(k) returns v.
+func (s *Sheet) SetFinal(k Key, v float64, source string) {
+	if r, ok := ratios[k]; ok {
+		v /= 1 + s.Pct(r)
+	}
+	s.Set(k, v, source)
+}
+
+// Entries lists every non-zero stat as the stat window shows it, offense first.
 func (s *Sheet) Entries() []Entry {
 	var out []Entry
 	for k, v := range s.values {
@@ -74,7 +105,14 @@ func (s *Sheet) Entries() []Entry {
 		if info.Label == "" {
 			info = Info{Label: string(k), Group: "other"}
 		}
-		out = append(out, Entry{k, info.Label, info.Group, info.Pct, round(v), s.sources[k]})
+		sources := s.sources[k]
+		if r, ok := ratios[k]; ok && s.values[r] != 0 {
+			final := s.Final(k)
+			sources = append(append([]Contribution(nil), sources...),
+				Contribution{"Increase", Label(r) + " " + strconv.FormatFloat(round(s.values[r]), 'f', -1, 64) + "%", final - v})
+			v = final
+		}
+		out = append(out, Entry{k, info.Label, info.Group, info.Pct, round(v), sources})
 	}
 	order := map[string]int{"offense": 0, "utility": 1, "defense": 2, "pvp": 3, "other": 4}
 	sort.Slice(out, func(i, j int) bool {

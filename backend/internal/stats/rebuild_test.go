@@ -63,3 +63,37 @@ func TestRebuildFixtures(t *testing.T) {
 		}
 	}
 }
+
+// TestStatWindowCalibration checks the rebuild against a real Spiritmaster's
+// in-game stat window (spiritmaster_calibrated, Oct 2026). Class base stats
+// are fitted to this character, so a failure means a rebuild change broke
+// agreement with the game.
+func TestStatWindowCalibration(t *testing.T) {
+	region, err := gamedata.Load("global")
+	if err != nil {
+		t.Fatal(err)
+	}
+	snap, err := testdata.Snapshot("spiritmaster_calibrated")
+	if err != nil {
+		t.Fatal(err)
+	}
+	class, _ := region.ClassForName(snap.Info.Profile.ClassName)
+	sheet, _ := Rebuild(snap, class)
+	window := map[Key]float64{
+		Critical:         858,
+		Accuracy:         449,
+		"CriticalResist": 264,
+		"Evasion":        121,
+		HPMax:            15365,
+		MPMax:            3453,
+		Defense:          11726,
+		CombatSpeed:      11.1,
+	}
+	for k, want := range window {
+		got := sheet.Final(k)
+		t.Logf("%-22s rebuilt %8.1f  window %8.1f", Label(k), got, want)
+		if d := (got - want) / want; d > 0.01 || d < -0.01 {
+			t.Errorf("%s: rebuilt %.1f, stat window %.1f", Label(k), got, want)
+		}
+	}
+}

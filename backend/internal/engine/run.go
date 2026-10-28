@@ -110,7 +110,7 @@ func Simulate(in Input, sc Scenario) (*Result, error) {
 	}
 	env := Env{Target: target, Const: in.Region.Constants, PowerShard: sc.PowerShard}
 	base := OffenseFrom(in.Sheet)
-	mpMax := in.Class.Model.Param("mpBase", 0) + in.Sheet.Get(stats.MPMax)
+	mpMax := in.Sheet.Final(stats.MPMax)
 	procs := parseTheostones(in.Procs)
 
 	totals := map[string]*sourceTotals{}

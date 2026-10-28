@@ -37,6 +37,7 @@ type ClassModel struct {
 	DisplayName string             `json:"displayName"`
 	Status      string             `json:"status"`
 	Base        map[string]float64 `json:"base"` // class base stats not exposed by the API
+	BaseSource  string             `json:"baseSource"`
 	CastTimes   map[string]float64 `json:"castTimes"`
 	Params      map[string]float64 `json:"params"`
 	Passives    []PassiveModel     `json:"passives"`

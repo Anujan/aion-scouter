@@ -204,7 +204,7 @@ func (s *Server) simulate(w http.ResponseWriter, r *http.Request) {
 	}
 	for k, v := range req.Overrides {
 		if _, ok := stats.Registry[k]; ok {
-			sheet.Set(k, v, "Your stat window")
+			sheet.SetFinal(k, v, "Your stat window")
 		}
 	}
 	sc := engine.DefaultScenario()
