@@ -12,7 +12,8 @@
   "buff": 0.5
  },
  "params": {
-  "latency": 0.1,
+  "latency": 0.15,
+  "latencyJitter": 0.2,
   "mpBase": 2000,
   "mpRegenPerSecond": 30,
   "mpReserve": 200,
@@ -85,6 +86,7 @@
   "You swap summons as they come off cooldown so each summon triggers its spirit's skill, building Four Elements for Elemental Fusion.",
   "Bosses are treated as immune to crowd control, and skills that need a Staggered target (Rapid Scattershot) are not used.",
   "Stigma specializations are not exposed by the API, so none are applied.",
-  "MP: 2,000 base plus gear and boards, regenerating 30 MP/s; Combustion is used while MP allows, otherwise Cold Shock."
+  "MP: 2,000 base plus gear and boards, regenerating 30 MP/s; Combustion is used while MP allows, otherwise Cold Shock.",
+  "Each cast is followed by a 0.05–0.25s reaction delay (average 0.15s), varied per cast."
  ]
 }

@@ -155,6 +155,7 @@ export interface Source {
 
 export interface SimResult {
 	dps: number;
+	dpsStdErr: number;
 	totalDamage: number;
 	duration: number;
 	iterations: number;
@@ -183,6 +184,7 @@ export interface StatValue {
 	dpsGain: number;
 	dpsGainPct: number;
 	attackEquivalent: number;
+	withinNoise: boolean;
 }
 
 export interface SimResponse {

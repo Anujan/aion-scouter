@@ -87,7 +87,7 @@
 	<div class="headline">
 		<div class="card big">
 			<div class="section-title">Estimated DPS</div>
-			<div class="dps num">{fmtInt(r.dps)}</div>
+			<div class="dps num">{fmtInt(r.dps)}<span class="err" title="Variation from proc luck between runs">± {fmtInt(2 * r.dpsStdErr)}</span></div>
 			<div class="muted">
 				{fmtInt(r.totalDamage)} damage in {r.duration}s against {r.target.name}, averaged over {r.iterations} runs
 			</div>
@@ -206,6 +206,13 @@
 		font-weight: 800;
 		letter-spacing: -0.03em;
 		line-height: 1.05;
+	}
+	.err {
+		font-size: 0.95rem;
+		font-weight: 500;
+		color: var(--muted);
+		margin-left: 0.5rem;
+		letter-spacing: 0;
 	}
 	dl {
 		display: grid;

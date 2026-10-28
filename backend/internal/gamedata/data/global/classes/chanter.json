@@ -10,7 +10,8 @@
   "buff": 0.5
  },
  "params": {
-  "latency": 0.1,
+  "latency": 0.15,
+  "latencyJitter": 0.2,
   "mpBase": 2000,
   "mpRegenPerSecond": 30,
   "mpReserve": 250,
@@ -78,6 +79,7 @@
   "Undefeated Mantra is an always-on aura while equipped. Earth's Promise lowers the target's Damage Tolerance whenever you are attacking.",
   "Gust Rampage needs a Staggered target and is not used.",
   "Stigma specializations are not exposed by the API, so none are applied.",
-  "MP: 2,000 base plus gear and boards, regenerating 30 MP/s; Incandescent Blow is used while MP allows, otherwise Onslaught."
+  "MP: 2,000 base plus gear and boards, regenerating 30 MP/s; Incandescent Blow is used while MP allows, otherwise Onslaught.",
+  "Each cast is followed by a 0.05–0.25s reaction delay (average 0.15s), varied per cast."
  ]
 }

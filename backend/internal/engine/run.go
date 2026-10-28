@@ -60,6 +60,7 @@ type Input struct {
 // Result is the outcome of a simulation.
 type Result struct {
 	DPS         float64            `json:"dps"`
+	DPSStdErr   float64            `json:"dpsStdErr"` // Monte Carlo standard error of DPS (proc luck)
 	TotalDamage float64            `json:"totalDamage"`
 	Duration    float64            `json:"duration"`
 	Iterations  int                `json:"iterations"`
@@ -114,11 +115,13 @@ func Simulate(in Input, sc Scenario) (*Result, error) {
 
 	totals := map[string]*sourceTotals{}
 	var timeline []TimelineEntry
+	runDPS := make([]float64, 0, sc.Iterations)
 	for i := 0; i < sc.Iterations; i++ {
 		kit := NewKit(in.Class, in.Loadout)
 		sim := newSim(env, in.Class.Model, base, newModule(kit), sc.Duration, sc.Seed+int64(i), mpMax, i == 0)
 		addTheostones(sim, procs)
 		sim.run()
+		runDPS = append(runDPS, sim.totalDamage()/sc.Duration)
 		for name, src := range sim.sources {
 			t, ok := totals[name]
 			if !ok {
@@ -148,6 +151,7 @@ func Simulate(in Input, sc Scenario) (*Result, error) {
 	res := &Result{
 		TotalDamage: total,
 		DPS:         total / sc.Duration,
+		DPSStdErr:   stdErr(runDPS),
 		Duration:    sc.Duration,
 		Iterations:  sc.Iterations,
 		Target:      target,
@@ -245,4 +249,20 @@ func addTheostones(s *Sim, stones []theostone) {
 			}
 		})
 	}
+}
+
+// stdErr is the standard error of the mean of xs.
+func stdErr(xs []float64) float64 {
+	if len(xs) < 2 {
+		return 0
+	}
+	var mean, ss float64
+	for _, x := range xs {
+		mean += x
+	}
+	mean /= float64(len(xs))
+	for _, x := range xs {
+		ss += (x - mean) * (x - mean)
+	}
+	return math.Sqrt(ss/float64(len(xs)-1)) / math.Sqrt(float64(len(xs)))
 }

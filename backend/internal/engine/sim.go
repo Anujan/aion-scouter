@@ -4,6 +4,7 @@ import (
 	"container/heap"
 	"math"
 	"math/rand"
+	"sort"
 
 	"github.com/anujan/aion-scouter/backend/internal/gamedata"
 )
@@ -139,7 +140,10 @@ func (s *Sim) actorReady() {
 	}
 	do := a.Do
 	s.At(s.T+cast, func() { do(s) })
-	s.At(s.T+cast+s.Model.Param("latency", 0.1), s.actorReady)
+	// Reaction delay varies per cast; a fixed delay makes cast cycles perfectly
+	// periodic and creates false breakpoints against 1s proc cooldowns.
+	delay := s.Model.Param("latency", 0.1) + (s.Rng.Float64()-0.5)*s.Model.Param("latencyJitter", 0)
+	s.At(s.T+cast+math.Max(0, delay), s.actorReady)
 }
 
 // At schedules fn at time t.
@@ -273,6 +277,20 @@ func (s *Sim) source(name, kind string) *sourceTotals {
 		s.sources[name] = src
 	}
 	return src
+}
+
+// totalDamage sums every source, in name order so the float sum is stable.
+func (s *Sim) totalDamage() float64 {
+	names := make([]string, 0, len(s.sources))
+	for n := range s.sources {
+		names = append(names, n)
+	}
+	sort.Strings(names)
+	var t float64
+	for _, n := range names {
+		t += s.sources[n].damage
+	}
+	return t
 }
 
 type event struct {

@@ -4,14 +4,17 @@
 
 	let { values }: { values: StatValue[] } = $props();
 
-	const sorted = $derived([...values].sort((a, b) => b.dpsGain - a.dpsGain));
+	const sorted = $derived(
+		[...values].sort((a, b) => Number(a.withinNoise) - Number(b.withinNoise) || b.dpsGain - a.dpsGain)
+	);
 	const max = $derived(Math.max(...values.map((v) => Math.abs(v.attackEquivalent)), 1));
 </script>
 
 <p class="muted lead">
 	Each row re-runs the simulation with one stat raised by the step shown. "Worth" converts the gain
 	into flat Attack, so different stats can be compared on one scale. This is the same idea as
-	MapleScouter's converted stat.
+	MapleScouter's converted stat. Gains marked ≈ 0 are smaller than the simulation's
+	run-to-run noise.
 </p>
 <table>
 	<thead>
@@ -27,10 +30,12 @@
 			<tr>
 				<td>{v.label}</td>
 				<td class="r num muted">+{fmtOne(v.step)}{v.pct ? '%' : ''}</td>
-				<td class="r num" class:zero={Math.abs(v.dpsGainPct) < 0.005}>{fmtSigned(v.dpsGainPct)}</td>
+				<td class="r num" class:zero={v.withinNoise} title={v.withinNoise ? 'Smaller than run-to-run noise' : ''}>
+					{v.withinNoise ? '≈ 0' : fmtSigned(v.dpsGainPct)}
+				</td>
 				<td class="bar-col">
-					<div class="bar"><span style="width: {(Math.max(0, v.attackEquivalent) / max) * 100}%"></span></div>
-					<span class="num eq">{fmtOne(v.attackEquivalent)}</span>
+					<div class="bar"><span style="width: {v.withinNoise ? 0 : (Math.max(0, v.attackEquivalent) / max) * 100}%"></span></div>
+					<span class="num eq" class:zero={v.withinNoise}>{v.withinNoise ? '–' : fmtOne(v.attackEquivalent)}</span>
 				</td>
 			</tr>
 		{/each}
