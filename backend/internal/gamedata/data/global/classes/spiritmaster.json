@@ -1,0 +1,90 @@
+{
+ "class": "spiritmaster",
+ "displayName": "Spiritmaster",
+ "status": "beta",
+ "base": {},
+ "castTimes": {
+  "default": 1.0,
+  "summon": 0.8,
+  "Elemental Fusion": 1.2,
+  "Cold Shock": 1.0,
+  "Combustion": 1.0,
+  "buff": 0.5
+ },
+ "params": {
+  "latency": 0.1,
+  "mpBase": 2000,
+  "mpRegenPerSecond": 30,
+  "mpReserve": 200,
+  "spiritBasicInterval": 2.0,
+  "spiritBasicCoef": 0.5,
+  "spiritSkillCooldown": 3,
+  "spiritAttackPerLevel": 0.02,
+  "descentWindow": 10,
+  "descentWindowAncient": 30,
+  "ancientDuration": 30,
+  "ancientBasicsPerSkill": 7,
+  "curseDuration": 5,
+  "corrodeDuration": 20,
+  "cursedCloudDuration": 10,
+  "dotIsTotal": 1,
+  "corrodeSpiritDamageTaken": 10,
+  "benedictionDuration": 10,
+  "flameBlessingDuration": 16.5,
+  "elementUnificationDuration": 10,
+  "elementUnificationMaxStacks": 5,
+  "procCooldown": 1
+ },
+ "passives": [
+  {
+   "skill": 16710000,
+   "stats": [
+    {
+     "key": "PvEAmplifyDamage",
+     "pattern": "caster's PvE Damage Boost by ([\\d.]+)%"
+    },
+    {
+     "key": "Perfect",
+     "pattern": "caster's [^.]*?Perfect Chance by ([\\d.]+)%"
+    }
+   ]
+  },
+  {
+   "skill": 16740000,
+   "stats": [
+    {
+     "key": "Critical",
+     "pattern": "caster's Critical Hit by ([\\d,]+)"
+    }
+   ]
+  },
+  {
+   "skill": 16760000,
+   "stats": [
+    {
+     "key": "HardHit",
+     "pattern": "Double Chance by ([\\d.]+)%"
+    }
+   ]
+  },
+  {
+   "skill": 16770000,
+   "stats": [
+    {
+     "key": "WeaponAccuracy",
+     "pattern": "caster's Accuracy by ([\\d,]+)"
+    }
+   ]
+  }
+ ],
+ "assumptions": [
+  "Cast times are estimates (1.0s for most skills, 0.8s for summons) scaled by Combat Speed; the client does not publish them.",
+  "Spirits use your Attack and damage multipliers. Fire, Water and Ancient spirits gain +2% Attack per skill level, as their tooltips say.",
+  "Spirit basic attacks hit every 2.0s for 50% of your Attack. This is a placeholder until DPS-meter logs calibrate it.",
+  "Damage-over-time numbers in tooltips are treated as the total over the effect's duration, not per tick.",
+  "You swap summons as they come off cooldown so each summon triggers its spirit's skill, building Four Elements for Elemental Fusion.",
+  "Bosses are treated as immune to crowd control, and skills that need a Staggered target (Rapid Scattershot) are not used.",
+  "Stigma specializations are not exposed by the API, so none are applied.",
+  "MP: 2,000 base plus gear and boards, regenerating 30 MP/s; Combustion is used while MP allows, otherwise Cold Shock."
+ ]
+}

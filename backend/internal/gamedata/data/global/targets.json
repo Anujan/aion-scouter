@@ -1,0 +1,30 @@
+{
+ "targets": [
+  {
+   "id": "dummy",
+   "name": "Training Dummy",
+   "description": "No defense or resistances. Shows your raw output, so it is the fairest way to compare two characters.",
+   "boss": false,
+   "defense": 0,
+   "critResist": 0,
+   "critDamageTolerance": 0,
+   "damageTolerance": 0,
+   "doubleResist": 0,
+   "estimated": false,
+   "source": "Reference target"
+  },
+  {
+   "id": "boss-generic",
+   "name": "Endgame Boss (generic)",
+   "description": "A stand-in for a level 45 dungeon boss. Boss stats live on NCSOFT's servers, so every value here is an estimate until DPS-meter data calibrates it.",
+   "boss": true,
+   "defense": 2000,
+   "critResist": 200,
+   "critDamageTolerance": 25,
+   "damageTolerance": 10,
+   "doubleResist": 30,
+   "estimated": true,
+   "source": "Community estimates: 25% crit damage tolerance and 30% double resist (gameplay.tips); defense, crit resist and damage tolerance are placeholders."
+  }
+ ]
+}

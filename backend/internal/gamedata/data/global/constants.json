@@ -1,0 +1,18 @@
+{
+ "defenseFactor": 0.1,
+ "critPerPoint": 0.001,
+ "critCap": 0.8,
+ "critDamageBase": 0.5,
+ "multiHitExtraHits": 2.5,
+ "multiHitHitFraction": 0.05,
+ "powerShardMultiplier": 0.0465,
+ "notes": {
+  "defenseFactor": "PvE damage reduction is 10% of (Defense - Penetration), flat per hit. gameplay.tips damage formula guide (KR-derived).",
+  "critPerPoint": "Crit chance rises 0.1% per Critical Hit point above the target's Critical Hit Resist, capped at 80% (800 points over resist). aion2.akunito.com stats page.",
+  "critCap": "80% cap. aion2.akunito.com; a 50% cap is a rumour.",
+  "critDamageBase": "Crits deal 1.5x before Critical Damage Boost; Critical Damage Boost is additive to that base.",
+  "multiHitExtraHits": "Multi-hit adds 1-4 extra hits (uniform average 2.5). Placement in the formula is unconfirmed; treated as an expected-value multiplier.",
+  "multiHitHitFraction": "Each extra multi-hit hit deals about 5% of the hit (gameplay.tips; akunito says 10-15%). Calibrate against DPS-meter logs.",
+  "powerShardMultiplier": "A regular Power Shard multiplies weapon attack by about 4.65% (gameplay.tips)."
+ }
+}
